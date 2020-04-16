@@ -1,0 +1,16 @@
+{
+	"version": 2,
+	"name": "neilbot-line",
+	"builds": [
+	    { "src": "*.html", "use": "@now/static" },
+	    { "src": "*.py", "use": "@now/python" },
+	    { "src": "*.js", "use": "@now/node" }
+	],
+	"env": {
+	    "ACCESS_TOKEN": "ks74JidwqwKvzbIfZIj+f7G5RRwPLuHbOP5QGibF8vA7rAePG+Nzxd8Oi4bJaI2l0BPVaGEkhpvGkizLMs7e9tyiQhtbY9WCSbt73TbiTjIbwez/+btqIvf46rF/xQCo4JFREPzCTAMnZsSqTbHE8wdB04t89/1O/w1cDnyilFU=",
+		"CHANNEL_SECRET": "3db021169e743d426cbff0fc5d54e70d"
+  	},
+	"routes": [
+	    { "src": "/.*", "dest": "/"}
+  	]
+}
