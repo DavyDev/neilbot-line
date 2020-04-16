@@ -2,6 +2,7 @@
 	"version": 2,
 	"name": "neilbot-line",
 	"builds": [
+	    { "src": "*.html", "use": "@now/static" },
 	    { "src": "*.py", "use": "@now/python" }
 	],
 	"env": {
