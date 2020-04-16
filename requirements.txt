@@ -3,3 +3,4 @@ line-bot-sdk
 python-decouple
 python-dotenv
 werkzeug>=0.15.4
+logdna

@@ -10,6 +10,8 @@ import sys
 import tempfile
 import threading
 import requests
+import logging
+from logdna import LogDNAHandler
 
 from argparse import ArgumentParser
 from flask import Flask, request, abort, send_from_directory
@@ -51,6 +53,16 @@ if channel_secret is None or channel_access_token is None:
 
 line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
+
+key = '959ce03f7bff86a86e99394f0d80b696'
+log = logging.getLogger('logdna')
+log.setLevel(logging.INFO)
+test = LogDNAHandler(key, options)
+
+log.addHandler(test)
+
+log.warning("Warning message", {'app': 'bloop'})
+log.info("Info message")
 
 static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
 
@@ -685,4 +697,5 @@ if __name__ == "__main__":
     make_static_tmp_dir()
 
     setInterval(290, keepmeAlive, 'https://neilbot-py.glitch.me/')
+    log.info('Service started..')
     app.run(debug=options.debug, port=options.port)
