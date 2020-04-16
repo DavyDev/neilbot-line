@@ -30,20 +30,12 @@ syslog = SysLogHandler(address=('logs2.papertrailapp.com', 51603))
 format = '%(asctime)s neilbot: %(message)s'
 formatter = logging.Formatter(format, datefmt='%b %d %H:%M:%S')
 syslog.setFormatter(formatter)
-
 logger = logging.getLogger()
 logger.addHandler(syslog)
 logger.setLevel(logging.INFO)
 
-def my_handler(type, value, tb):
-  logger.exception('Uncaught exception: {0}'.format(str(value)))
-
-# Install exception handler
-sys.excepthook = my_handler
-
 logger.info('This is a message')
-nofunction() #log an uncaught exception
-
+logger.exception('Uncaught exception!')
 
 app = Flask(__name__)
 
