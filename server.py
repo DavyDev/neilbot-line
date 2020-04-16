@@ -34,9 +34,6 @@ logger = logging.getLogger()
 logger.addHandler(syslog)
 logger.setLevel(logging.INFO)
 
-logger.info('This is a message')
-logger.exception('Uncaught exception!')
-
 app = Flask(__name__)
 
 # get channel_secret and channel_access_token from your environment variable
@@ -79,10 +76,11 @@ def callback():
             TextSendMessage(text=event.message.text)
         )
         log.info('text sent: {}'.format(event.message.text))
+        logger.info('text sent: {}'.format(event.message.text))
 
     return 'OK'
 
 
 if __name__ == "__main__":
     log.info("service started..")
-    app.run(debug=True)
+    app.run(debug=False)
