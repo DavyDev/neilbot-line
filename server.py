@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 import os
 import sys
 from argparse import ArgumentParser
+from modules import richmenu
 
 from flask import Flask, request, abort
 from linebot import (
