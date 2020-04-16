@@ -2,5 +2,4 @@ flask
 line-bot-sdk
 logdna
 python-decouple
-urllib3
-werkzeug>=0.15.4
+werkzeug
