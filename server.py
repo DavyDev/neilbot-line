@@ -46,7 +46,7 @@ parser = WebhookParser(channel_secret)
 
 
 @app.errorhandler(404)
-def index():
+def index(e):
     return render_template("index.html")
 
 @app.route('/hook', methods=['POST'])
