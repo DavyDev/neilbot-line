@@ -10,9 +10,7 @@ import sys
 import tempfile
 import threading
 import requests
-import logging
 
-from logdna import LogDNAHandler
 from argparse import ArgumentParser
 from flask import Flask, request, abort, send_from_directory
 from werkzeug.middleware.proxy_fix import ProxyFix
@@ -48,15 +46,6 @@ line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
 
 static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
-
-logoptions = {'ip': '127.0.0.1', 'hostname': 'davydev', 'index_meta': True}
-
-log = logging.getLogger('logdna')
-log.setLevel(logging.INFO)
-log.addHandler(LogDNAHandler(os.getenv('LOGDNA_KEY', None), logoptions))
-
-with open('./res/words.json') as f:
-    wordsMsg = json.load(f)
 
 ###############################################
 
