@@ -45,7 +45,7 @@ line_bot_api = LineBotApi(channel_access_token)
 parser = WebhookParser(channel_secret)
 
 
-@app.errorhandler(404)
+@app.errorhandler(404,405)
 def index(e):
     return render_template("index.html")
 
