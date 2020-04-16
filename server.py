@@ -30,6 +30,7 @@ logger.addHandler(syslog)
 logger.setLevel(logging.INFO)
 
 app = Flask(__name__)
+logger.info("service started..")
 
 # get channel_secret and channel_access_token from your environment variable
 channel_secret = os.getenv('CHANNEL_SECRET', None)
@@ -76,5 +77,4 @@ def callback():
 
 
 if __name__ == "__main__":
-    logger.info("service started..")
     app.run(debug=False)
