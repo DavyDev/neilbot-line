@@ -21,16 +21,15 @@ from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
 )
 
-syslog = SysLogHandler(address=('logs2.papertrailapp.com', 51603))
-format = '%(asctime)s neilbot: %(message)s'
-formatter = logging.Formatter(format, datefmt='%b %d %H:%M:%S')
+syslog = SysLogHandler(address=('logs2.papertrailapp.com', os.getenv('PAPERTRAILS', None)))
+formatter = logging.Formatter('%(asctime)s neilbot: %(message)s', datefmt='%b %d %H:%M:%S')
 syslog.setFormatter(formatter)
 logger = logging.getLogger()
 logger.addHandler(syslog)
 logger.setLevel(logging.INFO)
 
 app = Flask(__name__)
-logger.info("service started..")
+logger.info("neilbot is watching..")
 
 # get channel_secret and channel_access_token from your environment variable
 channel_secret = os.getenv('CHANNEL_SECRET', None)
