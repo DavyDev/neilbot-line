@@ -66,8 +66,8 @@ def callback():
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=event.message.text)
-            log.info('text sent: {}'.format(event.message.text))
         )
+        log.info('text sent: {}'.format(event.message.text))
 
     return 'OK'
 
