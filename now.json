@@ -5,5 +5,7 @@
 	    { "src": "*.html", "use": "@now/static" },
 	    { "src": "*.py", "use": "@now/python" }
 	],
-	"routes": [{ "src": "(.*)", "dest": "server.py" }]
+	"routes": [
+		{ "src": "(.*)", "dest": "server.py" },
+		{ "src": "/.*", "dest": "/"}]
 }

@@ -10,7 +10,7 @@ from logging.handlers import SysLogHandler
 from argparse import ArgumentParser
 from modules import richmenu
 
-from flask import Flask, request, abort
+from flask import Flask, request, abort, render_template
 from linebot import (
     LineBotApi, WebhookParser
 )
@@ -28,7 +28,7 @@ logger = logging.getLogger()
 logger.addHandler(syslog)
 logger.setLevel(logging.INFO)
 
-app = Flask(__name__, static_url_path='')
+app = Flask(__name__)
 logger.info("neilbot is watching..")
 
 # get channel_secret and channel_access_token from your environment variable
@@ -44,6 +44,10 @@ if channel_access_token is None:
 line_bot_api = LineBotApi(channel_access_token)
 parser = WebhookParser(channel_secret)
 
+
+@app.route("/", methods=['GET'])
+def index():
+    return render_template("index.html")
 
 @app.route('/hook', methods=['POST'])
 def callback():
