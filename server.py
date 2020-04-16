@@ -4,7 +4,9 @@ from __future__ import unicode_literals
 import os
 import sys
 import logging
+import socket
 
+from logging.handlers import SysLogHandler
 from argparse import ArgumentParser
 from logdna import LogDNAHandler
 from modules import richmenu
@@ -24,6 +26,23 @@ log = logging.getLogger('logdna')
 log.setLevel(logging.INFO)
 log.addHandler(LogDNAHandler(os.getenv('LOGDNA', None), {'hostname': 'neilbot', 'index_meta': True}))
 
+syslog = SysLogHandler(address=('logs2.papertrailapp.com', 51603))
+format = '%(asctime)s neilbot: %(message)s'
+formatter = logging.Formatter(format, datefmt='%b %d %H:%M:%S')
+syslog.setFormatter(formatter)
+
+logger = logging.getLogger()
+logger.addHandler(syslog)
+logger.setLevel(logging.INFO)
+
+def my_handler(type, value, tb):
+  logger.exception('Uncaught exception: {0}'.format(str(value)))
+
+# Install exception handler
+sys.excepthook = my_handler
+
+logger.info('This is a message')
+nofunction() #log an uncaught exception
 
 
 app = Flask(__name__)
