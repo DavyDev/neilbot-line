@@ -3,7 +3,10 @@ from __future__ import unicode_literals
 
 import os
 import sys
+import logging
+
 from argparse import ArgumentParser
+from logdna import LogDNAHandler
 from modules import richmenu
 
 from flask import Flask, request, abort
@@ -16,6 +19,12 @@ from linebot.exceptions import (
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
 )
+
+log = logging.getLogger('logdna')
+log.setLevel(logging.INFO)
+log.addHandler(LogDNAHandler(os.getenv('LOGDNA', None), {'hostname': 'neilbot', 'index_meta': True}))
+
+
 
 app = Flask(__name__)
 
@@ -63,4 +72,5 @@ def callback():
 
 
 if __name__ == "__main__":
+    log.info("service started..")
     app.run(debug=True)
