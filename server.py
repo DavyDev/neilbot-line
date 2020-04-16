@@ -28,17 +28,17 @@ logger = logging.getLogger()
 logger.addHandler(syslog)
 logger.setLevel(logging.INFO)
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='')
 logger.info("neilbot is watching..")
 
 # get channel_secret and channel_access_token from your environment variable
 channel_secret = os.getenv('CHANNEL_SECRET', None)
 channel_access_token = os.getenv('ACCESS_TOKEN', None)
 if channel_secret is None:
-    print('Specify LINE_CHANNEL_SECRET as environment variable.')
+    print('Please specify CHANNEL_SECRET in env variables')
     sys.exit(1)
 if channel_access_token is None:
-    print('Specify LINE_CHANNEL_ACCESS_TOKEN as environment variable.')
+    print('Please specify ACCESS_TOKEN in env variables')
     sys.exit(1)
 
 line_bot_api = LineBotApi(channel_access_token)
