@@ -709,4 +709,4 @@ if __name__ == "__main__":
     make_static_tmp_dir()
     #setInterval(290, keepmeAlive,
     #            'https://' + os.getenv('BASE_URL', None) + '.glitch.me/')
-    app.run(debug=parsConf.debug, port=parsConf.port)
+    app.run(debug=False)
