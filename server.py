@@ -32,7 +32,7 @@ line_bot_api = LineBotApi(channel_access_token)
 parser = WebhookParser(channel_secret)
 
 
-@app.route("/callback", methods=['POST'])
+@app.route(os.getenv('CHANNEL_SECRET', None), methods=['POST'])
 def callback():
     signature = request.headers['X-Line-Signature']
 
@@ -62,11 +62,4 @@ def callback():
 
 
 if __name__ == "__main__":
-    arg_parser = ArgumentParser(
-        usage='Usage: python ' + __file__ + ' [--port <port>] [--help]'
-    )
-    arg_parser.add_argument('-p', '--port', type=int, default=8000, help='port')
-    arg_parser.add_argument('-d', '--debug', default=False, help='debug')
-    options = arg_parser.parse_args()
-
     app.run(debug=False)
