@@ -21,7 +21,7 @@ from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
 )
 
-syslog = SysLogHandler(address=('logs2.papertrailapp.com', os.getenv('PAPERTRAILS', None)))
+syslog = SysLogHandler(address=('logs2.papertrailapp.com', 51603))
 formatter = logging.Formatter('%(asctime)s neilbot: %(message)s', datefmt='%b %d %H:%M:%S')
 syslog.setFormatter(formatter)
 logger = logging.getLogger()
