@@ -8,7 +8,6 @@ import socket
 
 from logging.handlers import SysLogHandler
 from argparse import ArgumentParser
-from logdna import LogDNAHandler
 from modules import richmenu
 
 from flask import Flask, request, abort
@@ -21,10 +20,6 @@ from linebot.exceptions import (
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
 )
-
-log = logging.getLogger('logdna')
-log.setLevel(logging.INFO)
-log.addHandler(LogDNAHandler(os.getenv('LOGDNA', None), {'hostname': 'neilbot', 'index_meta': True}))
 
 syslog = SysLogHandler(address=('logs2.papertrailapp.com', 51603))
 format = '%(asctime)s neilbot: %(message)s'
@@ -75,12 +70,11 @@ def callback():
             event.reply_token,
             TextSendMessage(text=event.message.text)
         )
-        log.info('text sent: {}'.format(event.message.text))
         logger.info('text sent: {}'.format(event.message.text))
 
     return 'OK'
 
 
 if __name__ == "__main__":
-    log.info("service started..")
+    logger.info("service started..")
     app.run(debug=False)
