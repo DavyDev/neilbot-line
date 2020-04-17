@@ -38,22 +38,12 @@ handler = WebhookHandler(channel_secret)
 parser = WebhookParser(channel_secret)
 app = Flask(__name__)
 logger.info("neilbot is watching..")
+static_tmp_path = 'static/tmp/'
 
-# create tmp dir for download content
-static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
-def make_static_tmp_dir():
-    try:
-        os.makedirs(static_tmp_path)
-    except OSError as exc:
-        if exc.errno == errno.EEXIST and os.path.isdir(static_tmp_path):
-            pass
-        else:
-            raise
 
 # importing words.json file
 with open('res/json/words.json') as f:
     wordsMsg = json.load(f)
-
 
 
 @app.errorhandler(Exception)
@@ -140,5 +130,4 @@ def handle_file_message(event):
 
 
 if __name__ == "__main__":
-    #make_static_tmp_dir()
     app.run(debug=False)
