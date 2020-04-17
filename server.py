@@ -1,6 +1,6 @@
 # utf-8 enconding
 from __future__ import unicode_literals
-import os, sys, logging, socket, json, tempfile
+import os, sys, logging, socket, json, tempfile, errno
 from logging.handlers import SysLogHandler
 from argparse import ArgumentParser
 from modules import richmenu
@@ -12,7 +12,8 @@ from linebot.exceptions import (
     LineBotApiError, InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage, ImageMessage, VideoMessage, AudioMessage
+    MessageEvent, TextMessage, TextSendMessage, ImageMessage, VideoMessage, AudioMessage,
+    FileMessage
 )
 
 syslog = SysLogHandler(address=('logs2.papertrailapp.com', 51603))
@@ -37,6 +38,17 @@ handler = WebhookHandler(channel_secret)
 parser = WebhookParser(channel_secret)
 app = Flask(__name__)
 logger.info("neilbot is watching..")
+
+# create tmp dir for download content
+static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
+def make_static_tmp_dir():
+    try:
+        os.makedirs(static_tmp_path)
+    except OSError as exc:
+        if exc.errno == errno.EEXIST and os.path.isdir(static_tmp_path):
+            pass
+        else:
+            raise
 
 # importing words.json file
 with open('res/json/words.json') as f:
@@ -128,4 +140,5 @@ def handle_file_message(event):
 
 
 if __name__ == "__main__":
+    make_static_tmp_dir()
     app.run(debug=False)
