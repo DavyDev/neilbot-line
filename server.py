@@ -75,6 +75,19 @@ def callback():
     except InvalidSignatureError:
         abort(400)
 
+    # handle webhook body
+    try:
+        nhandler.handle(body, signature)
+    except LineBotApiError as e:
+        print("Got exception from LINE Messaging API: %s\n" % e.message)
+        for m in e.error.details:
+            print("  %s: %s" % (m.property, m.message))
+        print("\n")
+    except InvalidSignatureError:
+        abort(400)
+
+    return 'OK'
+
     # if event is MessageEvent and message is TextMessage, then echo text
     for event in events:
         if not isinstance(event, MessageEvent):
