@@ -9,7 +9,7 @@ from linebot import (
     LineBotApi, WebhookHandler, WebhookParser
 )
 from linebot.exceptions import (
-    InvalidSignatureError
+    LineBotApiError, InvalidSignatureError
 )
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage, ImageMessage, VideoMessage, AudioMessage,
@@ -140,5 +140,5 @@ def handle_file_message(event):
 
 
 if __name__ == "__main__":
-    make_static_tmp_dir()
+    #make_static_tmp_dir()
     app.run(debug=False)
