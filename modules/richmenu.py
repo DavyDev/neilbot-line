@@ -9,7 +9,7 @@ from linebot.models import (
     RichMenu, RichMenuSize, RichMenuArea, RichMenuBounds, MessageAction, PostbackTemplateAction
 )
 
-channel_access_token = os.getenv('ACCESS_TOKEN', None)
+channel_access_token = os.getenv('LINE_ACCESS_TOKEN', None)
 line_bot_api = LineBotApi(channel_access_token)
 
 def createNew(image='res/img/logo.png'):
