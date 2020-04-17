@@ -44,6 +44,7 @@ static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
 def make_static_tmp_dir():
     try:
         os.makedirs(static_tmp_path)
+        logger.info("temp path created at: {}".format(static_tmp_path))
     except OSError as exc:
         if exc.errno == errno.EEXIST and os.path.isdir(static_tmp_path):
             pass
@@ -102,21 +103,24 @@ def handle_content_message(event):
         return
 
     message_content = line_bot_api.get_message_content(event.message.id)
-    with tempfile.NamedTemporaryFile(dir=static_tmp_path, prefix=ext + '-', delete=False) as tf:
-        for chunk in message_content.iter_content():
-            tf.write(chunk)
-        tempfile_path = tf.name
+    try:
+        with tempfile.NamedTemporaryFile(dir=static_tmp_path, prefix=ext + '-', delete=False) as tf:
+            for chunk in message_content.iter_content():
+                tf.write(chunk)
+            tempfile_path = tf.name
 
-    dist_path = tempfile_path + '.' + ext
-    dist_name = os.path.basename(dist_path)
-    os.rename(tempfile_path, dist_path)
+        dist_path = tempfile_path + '.' + ext
+        dist_name = os.path.basename(dist_path)
+        os.rename(tempfile_path, dist_path)
 
-    line_bot_api.reply_message(
-        event.reply_token, [
-            TextSendMessage(text='Save content.'),
-            TextSendMessage(text=request.host_url +
-                            os.path.join('static', 'tmp', dist_name))
-        ])
+        line_bot_api.reply_message(
+            event.reply_token, [
+                TextSendMessage(text='Save content.'),
+                TextSendMessage(text=request.host_url +
+                                os.path.join('static', 'tmp', dist_name))
+            ])
+    except Exception as e:
+        logger.info(e)
 
 
 @nhandler.add(MessageEvent, message=FileMessage)
