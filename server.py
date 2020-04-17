@@ -1,6 +1,6 @@
 # utf-8 enconding
 from __future__ import unicode_literals
-import os, sys, logging, socket, json, tempfile
+import os, sys, logging, socket, json, tempfile, errno
 from logging.handlers import SysLogHandler
 from argparse import ArgumentParser
 from modules import richmenu
