@@ -42,7 +42,7 @@ logger.info("neilbot is watching..")
 # importing words.json file
 with open('res/json/words.json') as f:
     wordsMsg = json.load(f)
-logger.info(wordsMsg)
+
 
 @app.errorhandler(Exception)
 def index(e):
@@ -66,7 +66,6 @@ def callback():
         print("\n")
     except InvalidSignatureError:
         abort(400)
-
     return 'OK'
 
 
