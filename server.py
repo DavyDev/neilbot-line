@@ -108,6 +108,7 @@ def handle_content_message(event):
             for chunk in message_content.iter_content():
                 tf.write(chunk)
             tempfile_path = tf.name
+            logger.info('tempfile path is {}'.format(tempfile_path))
 
         dist_path = tempfile_path + '.' + ext
         dist_name = os.path.basename(dist_path)
