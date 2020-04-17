@@ -54,11 +54,10 @@ if channel_access_token is None:
     sys.exit(1)
 
 line_bot_api = LineBotApi(channel_access_token)
-handler = WebhookHandler(channel_secret)
+myhandler = WebhookHandler(channel_secret)
 app = Flask(__name__)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_host=1, x_proto=1)
 logger.info("neilbot is watching..")
-
 
 # words.json file
 def openJSON(fname):
@@ -97,7 +96,7 @@ def callback():
 
     # handle webhook body
     try:
-        handler.handle(body, signature)
+        myhandler.handle(body, signature)
     except LineBotApiError as e:
         print("Got exception from LINE Messaging API: %s\n" % e.message)
         for m in e.error.details:
@@ -113,7 +112,7 @@ def send_static_content(path):
     return send_from_directory('static', path)
 
 
-@handler.add(MessageEvent, message=TextMessage)
+@myhandler.add(MessageEvent, message=TextMessage)
 def handle_text_message(event):
     text = event.message.text
 
@@ -164,31 +163,31 @@ def handle_text_message(event):
         saveJSON('words', wordsJSON, 'newWords', text)
 
 
-@handler.add(FollowEvent)
+@myhandler.add(FollowEvent)
 def handle_follow(event):
     line_bot_api.reply_message(
         event.reply_token, TextSendMessage(text='Got follow event'))
     print('[LOG] user {} just followed the bot.'.format(event.source.user_id))
 
 
-@handler.add(UnfollowEvent)
+@myhandler.add(UnfollowEvent)
 def handle_unfollow(event):
     print('[LOG] user {} unfollowed the bot.'.format(event.source.user_id))
 
 
-@handler.add(JoinEvent)
+@myhandler.add(JoinEvent)
 def handle_join(event):
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text='Hi! The bot joined the ' + event.source.type))
 
 
-@handler.add(LeaveEvent)
+@myhandler.add(LeaveEvent)
 def handle_leave():
     print('[LOG] bot left.')
 
 
-@handler.add(PostbackEvent)
+@myhandler.add(PostbackEvent)
 def handle_postback(event):
     if event.postback.data == 'ping':
         line_bot_api.reply_message(
@@ -203,17 +202,17 @@ def handle_postback(event):
             TextSendMessage(text=event.postback.params['date']))
 
 
-@handler.add(MemberJoinedEvent)
+@myhandler.add(MemberJoinedEvent)
 def handle_member_joined(event):
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text='Got memberJoined event. event={}'.format(event)))
 
 
-@handler.add(MemberLeftEvent)
+@myhandler.add(MemberLeftEvent)
 def handle_member_left(event):
     print("Got memberLeft event")
 
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(debug=True)

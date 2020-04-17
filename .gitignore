@@ -1,6 +1,8 @@
 /_env
 /.now
-.DS_Store
+/__pycache__
+*/__pycache__
 /.vscode
+.DS_Store
 .env
 linebot.code*
