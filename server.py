@@ -9,7 +9,7 @@ from linebot import (
     LineBotApi, WebhookHandler, WebhookParser
 )
 from linebot.exceptions import (
-    LineBotApiError, InvalidSignatureError
+    InvalidSignatureError
 )
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage, ImageMessage, VideoMessage, AudioMessage,
