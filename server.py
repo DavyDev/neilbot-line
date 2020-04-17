@@ -12,8 +12,7 @@ from linebot.exceptions import (
     LineBotApiError, InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage, ImageMessage, VideoMessage, AudioMessage,
-    FileMessage
+    MessageEvent, TextMessage, TextSendMessage
 )
 
 syslog = SysLogHandler(address=('logs2.papertrailapp.com', 51603))
@@ -42,6 +41,8 @@ logger.info("neilbot is watching..")
 # importing words.json file
 with open('res/json/words.json') as f:
     wordsMsg = json.load(f)
+with open('res/json/users.json') as f:
+    usrData = json.load(f)
 
 
 @app.errorhandler(Exception)
@@ -68,11 +69,21 @@ def callback():
         abort(400)
     return 'OK'
 
+def addUserList(source):
+    profile = line_bot_api.get_profile(source)
+    if usrData[profile.user_id] is None:
+        usrData[profile.user_id] = profile.display_name
+        with open('/res/json/users.json', 'w') as json_f:
+            json.dump(usrData, json_f)
+        logger.info('New user {} added'.format(source))
+    else: return
+
 
 @nhandler.add(MessageEvent, message=TextMessage)
 def handle_text_message(event):
     line_bot_api.reply_message(
         event.reply_token, TextSendMessage(text=event.message.text))
+    addUserList(event.source.userId)
     logger.info('text sent: {}'.format(event.message.text))
 
 
