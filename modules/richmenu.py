@@ -12,7 +12,7 @@ from linebot.models import (
 channel_access_token = os.getenv('ACCESS_TOKEN', None)
 line_bot_api = LineBotApi(channel_access_token)
 
-def createNew():
+def createNew(image='res/img/logo.png'):
     result = ''
     try:
         # define a new richmenu
@@ -37,7 +37,7 @@ def createNew():
         
         # upload an image for rich menu
         try:
-            with open('res/logo.png', 'rb') as f:
+            with open(image, 'rb') as f:
                 line_bot_api.set_rich_menu_image(richMenuId, 'image/png', f)
             result = 'Success upload image '
         except Exception as e:

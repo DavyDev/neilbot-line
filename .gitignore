@@ -1,4 +1,5 @@
 .DS_Store
 /myenv
-.now
+/.now
 /.env
+/.vscode
