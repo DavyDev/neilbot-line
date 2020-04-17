@@ -6,7 +6,7 @@ from argparse import ArgumentParser
 from modules import richmenu
 from flask import Flask, request, abort, render_template
 from linebot import (
-    LineBotApi, WebhookHandler, WebhookParser
+    LineBotApi, WebhookHandler
 )
 from linebot.exceptions import (
     LineBotApiError, InvalidSignatureError
@@ -35,7 +35,6 @@ if channel_access_token is None:
 
 line_bot_api = LineBotApi(channel_access_token)
 nhandler = WebhookHandler(channel_secret)
-parser = WebhookParser(channel_secret)
 app = Flask(__name__)
 logger.info("neilbot is watching..")
 
@@ -46,6 +45,7 @@ def make_static_tmp_dir():
         os.makedirs(static_tmp_path)
         logger.info("temp path created at: {}".format(static_tmp_path))
     except OSError as exc:
+        logger.info('ERROR make_static_tmp_dir: {}'.format(exc))
         if exc.errno == errno.EEXIST and os.path.isdir(static_tmp_path):
             pass
         else:
@@ -69,12 +69,6 @@ def callback():
     body = request.get_data(as_text=True)
     logger.info("Request body: " + body)
 
-    # parse webhook body
-    try:
-        events = parser.parse(body, signature)
-    except InvalidSignatureError:
-        abort(400)
-
     # handle webhook body
     try:
         nhandler.handle(body, signature)
@@ -88,21 +82,12 @@ def callback():
 
     return 'OK'
 
-    # if event is MessageEvent and message is TextMessage, then echo text
-    for event in events:
-        if not isinstance(event, MessageEvent):
-            continue
-        if not isinstance(event.message, TextMessage):
-            continue
 
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=event.message.text)
-        )
-        logger.info('text sent: {}'.format(event.message.text))
-
-    return 'OK'
-
+@nhandler.add(MessageEvent, message=TextMessage)
+def handle_text_message(event):
+    line_bot_api.reply_message(
+        event.reply_token, TextSendMessage(text=event.message.text))
+    logger.info('text sent: {}'.format(event.message.text))
 
 @nhandler.add(MessageEvent, message=(ImageMessage, VideoMessage, AudioMessage))
 def handle_content_message(event):
