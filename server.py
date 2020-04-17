@@ -34,7 +34,7 @@ if channel_access_token is None:
     sys.exit(1)
 
 line_bot_api = LineBotApi(channel_access_token)
-handler = WebhookHandler(channel_secret)
+nhandler = WebhookHandler(channel_secret)
 parser = WebhookParser(channel_secret)
 app = Flask(__name__)
 logger.info("neilbot is watching..")
