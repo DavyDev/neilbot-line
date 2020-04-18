@@ -1,6 +1,9 @@
 flask
+Flask-PyMongo
 gunicorn
 line-bot-sdk
+pylint
+pymongo
 pytest
 python-decouple
 python-dotenv

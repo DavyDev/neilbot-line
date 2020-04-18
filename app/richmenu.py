@@ -1,12 +1,10 @@
 import os
-from dotenv import load_dotenv
 from linebot import LineBotApi
 from linebot.models import (
     RichMenu, RichMenuSize, RichMenuArea, RichMenuBounds,
     MessageAction, PostbackTemplateAction
 )
 
-load_dotenv()
 channel_access_token = os.getenv('LINE_ACCESS_TOKEN', None)
 line_bot_api = LineBotApi(channel_access_token)
 
