@@ -1,14 +1,11 @@
 import os
 from dotenv import load_dotenv
-from linebot import (
-    LineBotApi, WebhookHandler
-)
-from linebot.exceptions import (
-    InvalidSignatureError
-)
+from linebot import LineBotApi
 from linebot.models import (
-    RichMenu, RichMenuSize, RichMenuArea, RichMenuBounds, MessageAction, PostbackTemplateAction
+    RichMenu, RichMenuSize, RichMenuArea, RichMenuBounds,
+    MessageAction, PostbackTemplateAction
 )
+
 load_dotenv()
 channel_access_token = os.getenv('LINE_ACCESS_TOKEN', None)
 line_bot_api = LineBotApi(channel_access_token)
@@ -34,8 +31,7 @@ def createNew(image='res/img/logo.png'):
             ]
         )
         richMenuId = line_bot_api.create_rich_menu(rich_menu=rich_menu_to_create)
-        print('New richMenu created: '+richMenuId)
-        
+        print('New richMenu created: '+richMenuId)        
         # upload an image for rich menu
         try:
             with open(image, 'rb') as f:
@@ -44,17 +40,13 @@ def createNew(image='res/img/logo.png'):
         except Exception as e:
             result = 'Failed to upload image: '+str(e)
             return result
-            
-
         # set the default rich menu
         line_bot_api.set_default_rich_menu(richMenuId)
         result += 'and set ' + str(richMenuId) + ' as default'
-
     except Exception as e:
         result = str(e)
-
     return result
-  
+
 def formatAll():
     rich_menu_list = line_bot_api.get_rich_menu_list()
     for rich_menu in rich_menu_list:

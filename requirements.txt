@@ -1,6 +1,7 @@
 flask
 gunicorn
 line-bot-sdk
+pytest
 python-decouple
 python-dotenv
 werkzeug

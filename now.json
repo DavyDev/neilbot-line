@@ -6,6 +6,6 @@
 	    { "src": "*.py", "use": "@now/python" }
 	],
 	"routes": [
-		{ "src": "(.*)", "dest": "server.py" }
+		{ "src": "(.*)", "dest": "run.py" }
 	]
 }

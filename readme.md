@@ -1,6 +1,12 @@
-# What to do after cloning
+# Notes
 
 - `python -m venv _env`
 - `pip install -r requirements.txt`
-- `ngrok http 5000`
-- `gunicorn --bind 127.0.0.1:5000 server:app`
+- `ngrok http 8000`
+- `gunicorn run:app --log-file --reload`
+
+visit [zeit]
+visit [heroku]
+
+[zeit]: https://neilbot-line.now.sh
+[heroku]: https://neilbot-py.herokuapp.com/hook

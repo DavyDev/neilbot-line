@@ -1,0 +1,10 @@
+language: python
+python:
+  - "3.7"
+env: SKIP_INTERPRETER=true
+
+install:
+  - pip install -r requirements.txt
+
+script:
+  - pytest

@@ -1,17 +1,8 @@
 # utf-8 enconding
 from __future__ import unicode_literals
-import os
-import sys
-import logging
-import socket
-import json
-import tempfile
-import errno
-import requests
-import datetime
+import os, sys, logging, json
+from . import richmenu
 from logging.handlers import SysLogHandler
-from argparse import ArgumentParser
-from modules import richmenu
 from flask import Flask, request, abort, render_template, send_from_directory
 from werkzeug.middleware.proxy_fix import ProxyFix
 from linebot import (
@@ -57,28 +48,8 @@ line_bot_api = LineBotApi(channel_access_token)
 myhandler = WebhookHandler(channel_secret)
 app = Flask(__name__)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_host=1, x_proto=1)
-logger.info("neilbot is watching..")
-
-# words.json file
-def openJSON(fname):
-    path = 'res/json/'+fname+'.json'
-    with open(path) as f:
-        wordsMsg = json.load(f)
-    print('[LOG] words.json loaded.')
-    return wordsMsg
-
-
-def saveJSON(fname, fjson, key, value):
-    if fjson[key] is None:
-        fjson[key] = []
-    fjson[key].append(value)
-    path = 'res/json/'+fname+'.json'
-    with open(path, 'w') as json_file:
-        json.dump(fjson, json_file)
-        print('[LOG] successfully saved words.json')
-    fjson = None
-    print('REseting..')
-    return
+#logger.info("neilbot is watching..")
+print('neilbot is watching..')
 
 
 @app.errorhandler(Exception)
@@ -92,7 +63,8 @@ def callback():
 
     # get request body as text
     body = request.get_data(as_text=True)
-    logger.info("Request body: " + body)
+    #logger.info("Request body: " + body)
+    print("Request body: " + body)
 
     # handle webhook body
     try:
@@ -158,9 +130,6 @@ def handle_text_message(event):
         line_bot_api.reply_message(
             event.reply_token, TextSendMessage(text=event.message.text))
         print('[LOG] bot sent message to user: "{}"'.format(text))
-        wordsJSON = openJSON('words')
-        print(wordsJSON)
-        saveJSON('words', wordsJSON, 'newWords', text)
 
 
 @myhandler.add(FollowEvent)
@@ -180,11 +149,12 @@ def handle_join(event):
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text='Hi! The bot joined the ' + event.source.type))
+    print('[LOG] bot just join group id {}'.format(event.source.group_id))
 
 
 @myhandler.add(LeaveEvent)
-def handle_leave():
-    print('[LOG] bot left.')
+def handle_leave(event):
+    print('[LOG] bot left group id {}'.format(event.source.room_id))
 
 
 @myhandler.add(PostbackEvent)
@@ -212,7 +182,3 @@ def handle_member_joined(event):
 @myhandler.add(MemberLeftEvent)
 def handle_member_left(event):
     print("Got memberLeft event")
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
