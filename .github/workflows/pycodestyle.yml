@@ -1,4 +1,4 @@
-name: Style My Python
+name: Py Validator
 on: [push]
 
 jobs:
